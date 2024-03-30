@@ -1,7 +1,8 @@
+import java.io.Serializable;
 import java.time.Duration;
 import java.time.LocalDateTime;
 
-public class Appointment {
+public class Appointment implements Serializable {
     private LocalDateTime dateTime; // Date and time of the appointment
     private String description; // Description of the appointment
     private boolean canceled; // Flag indicating if the appointment is canceled
@@ -11,7 +12,7 @@ public class Appointment {
     private final Duration cancellationTimeLimit = Duration.ofHours(24); // Time limit for cancellation
 
     // Constructor to initialize appointment details
-    public Appointment(LocalDateTime dateTime, String description, String type, double price) {
+    public Appointment(LocalDateTime dateTime, String description, String type) {
         this.dateTime = dateTime;
         this.description = description;
         this.canceled = false;
@@ -48,6 +49,10 @@ public class Appointment {
 
     // Setter methods
 
+    public void setDateTime(LocalDateTime Date) {
+        this.dateTime = Date;
+    }
+
     // Method to set the type of appointment
     public void setType(String type) {
         this.type = type;
@@ -57,9 +62,6 @@ public class Appointment {
     public void setPrice(double price) {
         this.price = price;
     }
-    public void setDateTime(LocalDateTime dateTime) {
-        this.dateTime = dateTime;
-    }
 
     // Method to cancel the appointment
     public void cancel() {
@@ -68,7 +70,8 @@ public class Appointment {
         // Calculate the duration until the appointment
         Duration timeUntilAppointment = Duration.between(now, dateTime);
 
-        // Check if the time until the appointment is within the cancellation time limit (24 hours)
+        // Check if the time until the appointment is within the cancellation time limit
+        // (24 hours)
         if (timeUntilAppointment.compareTo(cancellationTimeLimit) <= 0) {
             // If cancellation time limit is within the limit, apply deduction fee
             double deductionPercentage = 0.25; // 25% deduction fee
@@ -98,20 +101,14 @@ public class Appointment {
 
         // Determine the price based on the appointment type
         switch (appointmentType) {
-            case "scaling":
+            case "Cleaning":
                 price = 200.0;
                 break;
-            case "checkup":
+            case "Routine-Checkup":
                 price = 150.0;
                 break;
-            case "root canal treatment":
-                price = 450.0;
-                break;
-            case "filling":
+            case "Filling":
                 price = 250.0;
-                break;
-            case "braces":
-                price = 600.0;
                 break;
             // Add more cases for other appointment types with their corresponding prices
             default:
@@ -119,5 +116,17 @@ public class Appointment {
         }
 
         return price;
+    }
+
+    @Override
+    public String toString() {
+        return "Appointment{" +
+                "dateTime=" + dateTime +
+                ", description='" + description + '\'' +
+                ", canceled=" + canceled +
+                ", paid=" + paid +
+                ", type='" + type + '\'' +
+                ", price=" + price +
+                '}';
     }
 }
