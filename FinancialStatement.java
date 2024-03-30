@@ -1,100 +1,92 @@
+package dentalsoftware;
+
 import java.io.FileWriter;
-
 import java.util.ArrayList;
-
 import java.io.IOException;
 
- 
 
 public class FinancialStatement {
 
-    private ArrayList<Client> clients;
+   private ArrayList<Client> clients;
 
- 
 
-    public FinancialStatement(ArrayList<Client> clients) {
+   public FinancialStatement(ArrayList<Client> clients) {
 
-        this.clients = clients;
+       this.clients = clients;
 
-    }
+   }
 
- 
 
-    public void createStatement(String fileName) {
+   public void createStatement(String fileName) {
 
-        try (FileWriter writer = new FileWriter(fileName)) {
+       try (FileWriter writer = new FileWriter(fileName)) {
 
-            writer.write("Financial Statement\n");
+           writer.write("Financial Statement\n");
 
-            double revenue = calculateRevenue();
+           double revenue = calculateRevenue();
 
-            writer.write("Total Revenue: " + revenue + "\n");
+           writer.write("Total Revenue: " + revenue + "\n");
 
-            double profit = calculateProfit(revenue);
+           double profit = calculateProfit(revenue);
 
-            writer.write("Total Profit: " + revenue + "\n");
+           writer.write("Total Profit: " + profit + "\n");
 
-            writer.write("Appointment Prices: \n");
+           writer.write("Appointment Prices: \n");
 
-            writePrice(writer);
+           writePrice(writer);
 
-            System.out.println("Success");
+           System.out.println("Success");
 
-        } catch (IOException e) {
+       } catch (IOException e) {
 
-            System.out.println("There seems to be an error: " + e);
+           System.out.println("There seems to be an error: " + e);
 
-        }
+       }
 
- 
 
-    }
+   }
 
- 
 
-    public double calculateRevenue() {
+   public double calculateRevenue() {
 
-        double revenue = 0;
+       double revenue = 0;
 
-        for (Client client : clients) {
+       for (Client client : clients) {
 
-            for (Appointment appointment : client.pastAppointments()) {
+           for (Appointment appointment : client.pastAppointments()) {
 
-                if (appointment.isPaid() == true) {
+               if (appointment.isPaid() == true) {
 
-                    if ((appointment.getType().equals("Cleaning") || appointment.getType().equals("Filling")
+                   if ((appointment.getType().equals("Cleaning") || appointment.getType().equals("Filling")
 
-                            || appointment.getType().equals("Routine-Checkup")) == false) {
+                           || appointment.getType().equals("Routine-Checkup")) == false) {
 
-                        System.out.println(appointment.getType());
+                       System.out.println(appointment.getType());
 
-                        System.out.println("Invalid appointment type");
+                       System.out.println("Invalid appointment type");
 
-                    }
+                   }
 
- 
 
-                    else {
+                   else {
 
-                        revenue += appointment.getPrice();
+                       revenue += appointment.getPrice();
 
-                    }
+                   }
 
-                }
+               }
 
- 
 
-            }
+           }
 
-        }
+       }
 
-        return revenue;
+       return revenue;
 
-    }
+   }
 
- 
 
-    public double calculateProfit(double revenue) {
+   public double calculateProfit(double revenue) {
        double expenses = 0;
        for (Client client : clients) {
 
@@ -139,62 +131,59 @@ public class FinancialStatement {
 
     }
 
- 
+   public void writePrice(FileWriter writer) throws IOException {
 
-    public void writePrice(FileWriter writer) throws IOException {
+       double cleaning = 0;
 
-        double cleaning = 0;
+       double filling = 0;
 
-        double filling = 0;
+       double checkup = 0;
 
-        double checkup = 0;
 
- 
+       for (Client client : clients) {
 
-        for (Client client : clients) {
+           for (Appointment appointment : client.pastAppointments()) {
 
-            for (Appointment appointment : client.getAppointments()) {
+               if (appointment.isPaid()) {
 
-                if (appointment.isPaid()) {
+                   if (appointment.getType().equals("Cleaning")) {
 
-                    if (appointment.getType().equals("Cleaning")) {
+                       cleaning = 120;
 
-                        cleaning = 120;
+                       break;
 
-                        break;
+                   } else if (appointment.getType().equals("Filling")) {
 
-                    } else if (appointment.getType().equals("Filling")) {
+                       filling = 250;
 
-                        filling = 250;
+                       break;
 
-                        break;
+                   } else if (appointment.getType().equals("Routine Check-Up")) {
 
-                    } else if (appointment.getType().equals("Routine Check-Up")) {
+                       checkup = 135;
 
-                        checkup = 135;
+                       break;
 
-                        break;
+                   } else {
 
-                    } else {
+                       System.out.println("Invalid appointment type");
 
-                        System.out.println("Invalid appointment type");
+                       break;
 
-                        break;
+                   }
 
-                    }
+               }
 
-                }
+           }
 
-            }
+       }
 
-        }
+       writer.write("Expenses per cleaning: $" + cleaning + "\n");
 
-        writer.write("Expenses per cleaning: $" + cleaning + "\n");
+       writer.write("Expenses per filling: $" + filling + "\n");
 
-        writer.write("Expenses per filling: $" + filling + "\n");
+       writer.write("Expenses per routine check-up: $" + checkup + "\n");
 
-        writer.write("Expenses per routine check-up: $" + checkup + "\n");
+   }
 
-    }
-
-}   
+}  
