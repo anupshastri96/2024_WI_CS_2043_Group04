@@ -5,6 +5,7 @@ public class Client implements Serializable {
     private String givenName;
     private String lastName;
     private final int CLIENT_ID;
+    private String address;
     private String emailAddress;
     private long phoneNumber;
     private Boolean insurance;
@@ -12,13 +13,15 @@ public class Client implements Serializable {
     private ArrayList<Appointment> appointments;
 
     // Constructors
-    public Client(String givenNameIn, String lastNameIn, int clientIdIn, String emailAddressIn, long phoneNumberIn,
+    public Client(String givenNameIn, String lastNameIn, int clientIdIn, String addressIn, String emailAddressIn,
+            long phoneNumberIn,
             Boolean insuranceIn,
             String paymentMethodIn,
             ArrayList<Appointment> appointmentsIn) {
         givenName = givenNameIn;
         lastName = lastNameIn;
         CLIENT_ID = clientIdIn;
+        address = addressIn;
         emailAddress = emailAddressIn;
         phoneNumber = phoneNumberIn;
         insurance = insuranceIn;
@@ -26,12 +29,14 @@ public class Client implements Serializable {
         appointments = appointmentsIn;
     }
 
-    public Client(String givenNameIn, String lastNameIn, int clientIdIn, String emailAddressIn, long phoneNumberIn,
+    public Client(String givenNameIn, String lastNameIn, int clientIdIn, String addressIn, String emailAddressIn,
+            long phoneNumberIn,
             Boolean insuranceIn,
             String paymentMethodIn) {
         givenName = givenNameIn;
         lastName = lastNameIn;
         CLIENT_ID = clientIdIn;
+        address = addressIn;
         emailAddress = emailAddressIn;
         phoneNumber = phoneNumberIn;
         insurance = insuranceIn;
@@ -46,6 +51,10 @@ public class Client implements Serializable {
 
     public int getClientId() {
         return CLIENT_ID;
+    }
+
+    public String getAddress() {
+        return address;
     }
 
     public String getEmailAddress() {
@@ -89,7 +98,7 @@ public class Client implements Serializable {
     public ArrayList<Appointment> pastAppointments() {
         ArrayList<Appointment> pastAppointments = new ArrayList<>(0);
         for (int i = 0; i < appointments.size(); i++) {
-            if (appointments.get(i).isPaid() == true) {
+            if ((appointments.get(i).isPaid() == true) && (appointments.get(i).isCanceled() == false)) {
                 pastAppointments.add(appointments.get(i));
             }
         }
@@ -100,7 +109,7 @@ public class Client implements Serializable {
     public ArrayList<Appointment> upcomingAppointments() {
         ArrayList<Appointment> upcomingAppointments = new ArrayList<>(0);
         for (int i = 0; i < appointments.size(); i++) {
-            if (appointments.get(i).isPaid() == false) {
+            if ((appointments.get(i).isPaid() == false) && (appointments.get(i).isCanceled() == false)) {
                 upcomingAppointments.add(appointments.get(i));
             }
         }
@@ -119,6 +128,10 @@ public class Client implements Serializable {
 
     public void changeLastName(String newLastName) {
         lastName = newLastName;
+    }
+
+    public void changeAddress(String newAddress) {
+        address = newAddress;
     }
 
     public void changeEmailAddress(String newEmail) {
@@ -149,6 +162,16 @@ public class Client implements Serializable {
                 ", insurance=" + insurance +
                 ", paymentMethod='" + paymentMethod + '\'' +
                 ']';
+    }
+
+    public String upcomingAppointmentsToString() {
+        String s = "";
+        ArrayList<Appointment> clientAppointments = this.upcomingAppointments();
+        for (int i = 0; i < clientAppointments.size(); i++) {
+            s = s + clientAppointments.get(i).toString() + "\n";
+        }
+
+        return s;
     }
 
 }
